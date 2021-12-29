@@ -18,20 +18,72 @@ public:
 class Solution {
 public:
     Node* connect(Node* root) {
-        if(!root) return nullptr;
-        queue<Node*> q;
-        q.push(root);        
-        while(size(q)) {
-            Node* rightNode = nullptr;                    // set rightNode to null initially
-            for(int i = size(q); i; i--) {                // traversing each level
-                auto cur = q.front(); q.pop();            // pop a node from current level and,
-                cur -> next = rightNode;                  // set its next pointer to rightNode
-                rightNode = cur;                          // update rightNode as cur for next iteration
-                if(cur -> right)                          // if a child exists
-                    q.push(cur -> right),                 // IMP: push right first to do right-to-left BFS
-                    q.push(cur -> left);                  // then push left
+        if(root==NULL || (root->left==NULL)){
+            return root;
+        }
+        queue<Node *> q;
+        vector <Node*> seq;
+        q.push(root);
+        Node *tempnode=new Node(-1111);
+        q.push(tempnode);
+        while(!q.empty()){
+            Node *curr=q.front();
+            q.pop();
+            seq.push_back(curr);
+            if(curr->val==-1111){
+                if(q.empty()){
+                    break;
+                }
+                else
+                q.push(curr);
+            }
+            if(curr->left!=NULL){
+                q.push(curr->left);
+            }
+            
+            if(curr->right!=NULL){
+                q.push(curr->right);
             }
         }
-        return root;
+        
+      /*  for(int i=0;i<seq.size();i++){
+            cout<<seq[i]->val<< " "<<endl;
+            if(seq[i]->val==-1111){
+                continue;
+            }
+            else{
+                seq[i]->next=seq[i+1];
+            }
+        }*/
+        int n=seq.size();
+        Node *rightnode=seq[n-1];
+        bool is=false;
+        // for(int i=n-2;i>=0;i--){
+        //     if(seq[i]->val==-1111){
+        //         is=true;
+        //         continue;
+        //     }
+        //     if(is==true){
+        //         seq[i]->next=NULL;
+        //         is=false;
+        //     }
+        //    else{ seq[i]->next=rightnode;
+        //     rightnode=seq[i];}
+        // }
+        for(int i=n-1;i>=0;i--){
+            if(seq[i]->val==-1111){
+                rightnode=seq[i];
+                continue;
+            }
+            if(rightnode->val==-1111){
+                
+                seq[i]->next=NULL;
+            }
+            else{
+                seq[i]->next=rightnode;
+            }
+            rightnode=seq[i];
+        }
+        return seq[0];
     }
 };
