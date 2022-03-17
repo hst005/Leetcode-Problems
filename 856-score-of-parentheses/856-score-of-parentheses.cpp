@@ -10,7 +10,7 @@ public:
             else {
                 depth--;
                 if (prev == '(')
-                    res += pow(2, depth);
+                    res += 1<<depth;
             }
             
             prev = ch;
